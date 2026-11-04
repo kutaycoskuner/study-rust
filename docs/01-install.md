@@ -88,6 +88,20 @@ Rust toolchain and editor support on Windows, macOS and Linux.
         - `Compiling <name> v0.1.0 ...` → `Finished dev profile ...` → `Running ...`
         - last line: `Hello, world!`
     - `link.exe not found` (Windows) / `linker 'cc' not found` (macOS, Linux) → step 2
+    - **workspace**: run any project from the repo root
+        - root `Cargo.toml` groups the projects
+            ```toml
+            [workspace]
+            members = ["practice/*"]
+            resolver = "3"
+            ```
+        - `members`: project folders, `*` = every folder; each listed folder must exist (`projects/*` is added once `projects/` exists)
+        - `resolver = "3"`: dependency resolution for edition 2024
+        - from the root
+            ```bash
+            cargo run -p hello    # -p = package name from its Cargo.toml
+            ```
+        - one shared `target/` and `Cargo.lock` at the root
 
 > **Example: this repo's setup**
 > - Windows 10, PowerShell 7 in the VS Code terminal
@@ -100,6 +114,7 @@ Rust toolchain and editor support on Windows, macOS and Linux.
 - inside an existing repo: `cargo new <path> --vcs none`, else a nested `.git` is created
 
 ## Changes
+- 2026-11-04 — step 7: root workspace, `cargo run -p <name>` from the repo root
 - 2026-11-03 — step 7 first build added; example lists extensions and first-build result
 - 2026-11-03 — example: existing 1.79.0 updated to 1.99.1; lessons added
 - 2026-11-03 — page created: install steps for Windows, macOS, Linux

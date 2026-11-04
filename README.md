@@ -18,5 +18,8 @@
         - [What & why](docs/01-install.md#what--why)
         - [Steps](docs/01-install.md#steps)
 - Concepts
+    - [02 Variables](docs/02-variables.md): let, mut, const, shadowing
+        - [What & why](docs/02-variables.md#what--why)
+        - [Steps](docs/02-variables.md#steps)
 - Practice
 - Projects
