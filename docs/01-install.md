@@ -2,7 +2,34 @@
 
 Rust toolchain and editor support on Windows, macOS and Linux.
 
-## What & why
+## Check existing install
+
+- maybe Rust is already there: check before installing
+    ```bash
+    rustup --version; rustc --version; cargo --version
+    ```
+- expect: three version lines → go to [Update or remove](#update-or-remove); `not recognized` / `command not found` → continue
+- > **Example: this repo** — Rust 1.79.0 already installed
+
+## Linker
+
+- **linker / C build tools**: joins compiled parts into the final executable
+    - why: rustc needs the platform's linker; it is not bundled
+- **Windows**
+    - Visual Studio Build Tools with the **Desktop development with C++** workload
+    - or skip: the rustup installer offers to install it (option 1)
+- **macOS**
+    ```bash
+    xcode-select --install
+    ```
+- **Linux**
+    ```bash
+    sudo apt install build-essential    # Debian/Ubuntu
+    sudo dnf install gcc                # Fedora
+    ```
+- expect: install finishes without errors
+
+## rustup, rustc, cargo
 
 - **rustup**: installer and version manager for Rust
     - why: one command installs, updates and removes the whole toolchain
@@ -10,33 +37,7 @@ Rust toolchain and editor support on Windows, macOS and Linux.
     - why: does the actual compiling; rarely called directly
 - **cargo**: build tool and package manager
     - why: creates projects, builds, runs, tests and fetches libraries (crates)
-- **linker / C build tools**: joins compiled parts into the final executable
-    - why: rustc needs the platform's linker; it is not bundled
-- **rust-analyzer**: language server for the editor
-    - why: completion, inline errors, go-to-definition in VS Code
-
-## Steps
-
-1. **Check whether Rust is already installed.**
-    ```bash
-    rustup --version; rustc --version; cargo --version
-    ```
-    - expect: three version lines → skip to step 4; `not recognized` / `command not found` → continue
-2. **Install the linker / C build tools.**
-    - **Windows**
-        - Visual Studio Build Tools with the **Desktop development with C++** workload
-        - or skip: the rustup installer in step 3 offers to install it (option 1)
-    - **macOS**
-        ```bash
-        xcode-select --install
-        ```
-    - **Linux**
-        ```bash
-        sudo apt install build-essential    # Debian/Ubuntu
-        sudo dnf install gcc                # Fedora
-        ```
-    - expect: install finishes without errors
-3. **Install rustup (brings rustc and cargo).**
+- install rustup; it brings rustc and cargo
     - **Windows**
         ```powershell
         winget install Rustlang.Rustup
@@ -48,7 +49,7 @@ Rust toolchain and editor support on Windows, macOS and Linux.
         ```
         - asks for an install type: `1) Proceed with standard installation`
     - expect: `Rust is installed now. Great!`
-4. **Reload the shell and verify.**
+- reload the shell and verify
     - **Windows**: close and reopen the terminal (and VS Code)
     - **macOS / Linux**
         ```bash
@@ -59,61 +60,71 @@ Rust toolchain and editor support on Windows, macOS and Linux.
         rustc --version; cargo --version
         ```
     - expect: `rustc 1.xx.x (...)` and `cargo 1.xx.x (...)`
-5. **Add rust-analyzer to VS Code.**
-    ```bash
-    code --install-extension rust-lang.rust-analyzer
-    ```
-    - or Extensions panel → search `rust-analyzer`
-    - expect: `Extension 'rust-lang.rust-analyzer' ... was successfully installed`
-6. **Later: update or remove.**
+
+## Update or remove
+
+- `rustup` manages the toolchain (machine); `cargo` manages a project and its crates
     ```bash
     rustup update            # newest stable toolchain
     rustup self uninstall    # removes rustup, rustc, cargo
     ```
-7. **First build: proves compiler and linker work.**
-    - once, from the repo root: create the project and enter its folder
-        ```bash
-        # ; splits commands on one line: create project → enter its folder
-        cargo new practice/hello --vcs none; cd practice/hello
-        ```
-        - `;` runs the next command even if the previous one failed (PowerShell, bash, zsh; not cmd.exe)
-        - `--vcs none`: no `git init`; needed inside an existing repo
-        - run it again from inside `practice/hello` → creates `practice/hello/practice/hello`
-    - every time, from inside `practice/hello`: build and run
-        ```bash
-        cargo run
-        ```
-    - expect
-        - `Creating binary (application) '<name>' package`
-        - `Compiling <name> v0.1.0 ...` → `Finished dev profile ...` → `Running ...`
-        - last line: `Hello, world!`
-    - `link.exe not found` (Windows) / `linker 'cc' not found` (macOS, Linux) → step 2
-    - **workspace**: run any project from the repo root
-        - root `Cargo.toml` groups the projects
-            ```toml
-            [workspace]
-            members = ["practice/*"]
-            resolver = "3"
-            ```
-        - `members`: project folders, `*` = every folder; each listed folder must exist (`projects/*` is added once `projects/` exists)
-        - `resolver = "3"`: dependency resolution for edition 2024
-        - from the root
-            ```bash
-            cargo run -p hello    # -p = package name from its Cargo.toml
-            ```
-        - one shared `target/` and `Cargo.lock` at the root
+- > **Example: this repo** — `rustup update` → `rustc 1.99.1 (58cf8f9c3 2026-10-13)` (from 1.79.0)
 
-> **Example: this repo's setup**
-> - Windows 10, PowerShell 7 in the VS Code terminal
-> - step 1: Rust 1.79.0 already installed → step 6 `rustup update` → `rustc 1.99.1 (58cf8f9c3 2026-10-13)`
-> - VS Code extensions: `rust-lang.rust-analyzer`, `1yib.rust-bundle` (extension pack), `dustypomerleau.rust-syntax` (syntax colors)
-> - step 7: `practice/hello`, first build `Finished dev profile ... in 13.46s` → `Hello, world!`
+## rust-analyzer
+
+- **rust-analyzer**: language server for the editor
+    - why: completion, inline errors, go-to-definition in VS Code
+    ```bash
+    code --install-extension rust-lang.rust-analyzer
+    ```
+    - or Extensions panel → search `rust-analyzer`
+- expect: `Extension 'rust-lang.rust-analyzer' ... was successfully installed`
+- > **Example: this repo** — `rust-lang.rust-analyzer`, `1yib.rust-bundle` (extension pack), `dustypomerleau.rust-syntax` (syntax colors)
+
+## First build
+
+- proves compiler and linker work
+- once, from the repo root: create the project and enter its folder
+    ```bash
+    # ; splits commands on one line: create project → enter its folder
+    cargo new practice/hello --vcs none; cd practice/hello
+    ```
+    - `;` runs the next command even if the previous one failed (PowerShell, bash, zsh; not cmd.exe)
+    - `--vcs none`: no `git init`; needed inside an existing repo
+    - run it again from inside `practice/hello` → creates `practice/hello/practice/hello`
+- every time, from inside `practice/hello`: build and run
+    ```bash
+    cargo run
+    ```
+- expect
+    - `Creating binary (application) '<name>' package`
+    - `Compiling <name> v0.1.0 ...` → `Finished dev profile ...` → `Running ...`
+    - last line: `Hello, world!`
+- `link.exe not found` (Windows) / `linker 'cc' not found` (macOS, Linux) → [Linker](#linker)
+- > **Example: this repo** — first build `Finished dev profile ... in 13.46s` → `Hello, world!`
+
+## Workspace
+
+- **workspace**: a root `Cargo.toml` grouping several projects
+    - why: run any project from the repo root; one shared `target/` and `Cargo.lock`
+    ```toml
+    [workspace]
+    members = ["practice/*"]
+    resolver = "3"
+    ```
+- `members`: project folders, `*` = every folder; each listed folder must exist (`projects/*` is added once `projects/` exists)
+- `resolver = "3"`: dependency resolution for edition 2024
+- from the root
+    ```bash
+    cargo run -p hello    # -p = package name from its Cargo.toml
+    ```
 
 ## Lessons
 - already installed → `rustup update` upgrades in place, no reinstall
 - inside an existing repo: `cargo new <path> --vcs none`, else a nested `.git` is created
 
 ## Changes
+- 2026-11-11 — restructured: one section per tool instead of "What & why" + "Steps"; examples moved into their sections; workspace is its own section
 - 2026-11-04 — step 7: root workspace, `cargo run -p <name>` from the repo root
 - 2026-11-03 — step 7 first build added; example lists extensions and first-build result
 - 2026-11-03 — example: existing 1.79.0 updated to 1.99.1; lessons added

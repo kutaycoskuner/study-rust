@@ -15,11 +15,21 @@
 
 - Install
     - [01 Install](docs/01-install.md): rustup, rustc, cargo, rust-analyzer on Windows, macOS, Linux
-        - [What & why](docs/01-install.md#what--why)
-        - [Steps](docs/01-install.md#steps)
+        - [Check existing install](docs/01-install.md#check-existing-install)
+        - [Linker](docs/01-install.md#linker)
+        - [rustup, rustc, cargo](docs/01-install.md#rustup-rustc-cargo)
+        - [Update or remove](docs/01-install.md#update-or-remove)
+        - [rust-analyzer](docs/01-install.md#rust-analyzer)
+        - [First build](docs/01-install.md#first-build)
+        - [Workspace](docs/01-install.md#workspace)
 - Concepts
-    - [02 Variables](docs/02-variables.md): let, mut, const, shadowing
-        - [What & why](docs/02-variables.md#what--why)
-        - [Steps](docs/02-variables.md#steps)
+    - [02 Variables](docs/02-variables.md): let, mut, shadowing, types, const
+        - [Setup](docs/02-variables.md#setup)
+        - [Immutable by default](docs/02-variables.md#immutable-by-default)
+        - [Mutability](docs/02-variables.md#mutability)
+        - [Shadowing](docs/02-variables.md#shadowing)
+        - [Types don't change](docs/02-variables.md#types-dont-change)
+        - [Constants](docs/02-variables.md#constants)
+        - [Errors and warnings](docs/02-variables.md#errors-and-warnings)
 - Practice
 - Projects
